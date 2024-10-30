@@ -32,7 +32,7 @@ In this project, a given dataset with the **Most Streamed Spotify Songs 2023** w
 - Which track has the highest number of streams? Display the top 5 most streamed tracks.
 - Who are the top 5 most frequent artists based on the number of tracks in the dataset?
   
-** Temporal Trends**
+**Temporal Trends**
 - Analyze the trends in the number of tracks released over time. Plot the number of tracks released per year.
 - Does the number of tracks released per month follow any noticeable patterns? Which month sees the most releases?
   
