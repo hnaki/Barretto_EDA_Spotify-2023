@@ -97,10 +97,95 @@ According to the output:
 
 ![image](https://github.com/user-attachments/assets/8632046a-310b-4863-9c9c-0f2a2b7cdccc)
 
-There are two categories with missing values.50 outputs are missing in the category **in_shazam_charts** and 95 in the category **key**.
+There are two categories with missing values. 50 outputs are missing in the category **in_shazam_charts** and 95 in the category **key**.
+
+
+**Basic Descriptive Statistics**
+
+
+To check the mean and standard deviation of the streams column, using this code can first determine the description of the whole dataset.
+
+```ruby
+spot_df['streams'] = pd.to_numeric(spot_df['streams'], errors='coerce')
+spot_df.describe()
+```
+
+Since the streams before was in object data type, converting it into numeric can show the data description. The output will show all the column categories, now looking for the streams column, determining the mean and standard deviation:
+
+![image](https://github.com/user-attachments/assets/42deeccf-2aef-4a4b-a062-c413eb4f2506)
+
+The mean is 5.141378 x 10^8 streams while the standard deviation is 5.668569 x 10^8 streams.
+
+To determine the median, the code below was used:
+
+```ruby
+median = int(spot_df['streams'].median())
+print(f'The median is {median} streams.')
+```
+
+However, there were no exact number of median streams, so I decided to check what is the closest track near the median streams using the code below:
+
+```ruby
+median_row = spot_df.loc[spot_df['streams'] == median, ['artist(s)_name', 'track_name', 'streams']]
+# If no exact match, find the row closest to the median
+if median_row.empty:
+    sorted_spot_df = spot_df.sort_values(by='streams').reset_index(drop=True)
+    closest_index = (sorted_spot_df['streams'] - median).abs().idxmin()
+    median_row = sorted_spot_df.loc[[closest_index], ['artist(s)_name', 'track_name', 'streams']]
+    
+print(f'The closest streams to the median is the track name "Every Summertime" by NIKI.')
+median_row
+```
+
+This will show the output below:
+
+![image](https://github.com/user-attachments/assets/a440924c-d11c-4f6e-9d79-04f0fdd3e281)
+
+The code below shows the distribution of the **released_year** and **artist_count**:
+
+For the released_year:
+```ruby
+sns.set(style="whitegrid")
+
+# Plot distribution of 'released_year'
+plt.figure(figsize=(12, 6))
+sns.histplot(spot_df['released_year'], bins=15, kde=True, color='skyblue')
+plt.title('Distribution of Track Release Years')
+plt.xlabel('Release Year')
+plt.ylabel('Count')
+plt.show()
+```
+
+And for the artist_count:
+```ruby
+# Plot distribution of 'artist_count'
+plt.figure(figsize=(12, 6))
+sns.histplot(spot_df['artist_count'], bins=15, kde=True, color='salmon')
+plt.title('Distribution of Artist Count per Track')
+plt.xlabel('Artist Count')
+plt.ylabel('Count')
+plt.show()
+```
+
+This will show a data visualization chart:
+
+For the released_year:
+
+![image](https://github.com/user-attachments/assets/52c891d1-77f5-4c7e-9ac1-1df05a2b1278)
+
+As the years go, during 1960-1980, there was a few to little released tracks during the year that were still famous for 2023. During 2000-2020, the number of released tracks increased drastically. Around 2020 was almost the tip of how many tracks that are famous for 2023.
+
+For the artist_count:
+
+![image](https://github.com/user-attachments/assets/aadb9dbe-4a14-4afd-9183-7026016863d5)
+
+There are many single artists who have the famous tracks of 2023 and as the artist count increases, the trend goes downward.
+
 
 
 ### Updates:
+
+  v1.7 - Answered the Basic Descriptive Statistics
 
   v1.4 - Answered the Overview of the Dataset
 
