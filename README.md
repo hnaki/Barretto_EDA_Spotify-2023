@@ -48,26 +48,61 @@ In this project, a given dataset with the **Most Streamed Spotify Songs 2023** w
 - Do certain genres or artists consistently appear in more playlists or charts? Perform an analysis to compare the most frequently appearing artists in playlists or charts.
 
 
+## DOCUMENTATION
+
+**Overview of Dataset**
+
+In order to check how many rows and columns are in the dataset, the dataset must be first loaded into the jupyter notebook. The dataset can be downloaded to a .csv file and was uploaded to the correct folder where the jupyter notebook is also located. After that, the code written below was used to load the .csv file.
+
+```ruby
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+spot_df = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
+spot_df
+```
+
+This will load the dataset into the notebook:
+
+![image](https://github.com/user-attachments/assets/fdb38417-c8eb-4b6b-8009-6851c37efcfa)
 
 
+![image](https://github.com/user-attachments/assets/427cf3ef-8fb6-45e1-aa0d-4eaaff266126)
 
 
+Using the code **encoding='ISO-8859-1** will prevent loading errors due to special characters like **#**. There are 953 rows and 24 columns inside the dataset. The columns serves as the categories while the rows serves as the entries, or the songs that were listed in the dataset.
+
+In order to determine the types of categories of the dataset, the code was written below:
+
+```ruby
+spot_df.info()
+```
+
+This will show the information of the categories of the dataset:
+
+![image](https://github.com/user-attachments/assets/83c27c04-1e06-4db7-a661-d13e1b9d1f4b)
 
 
+There are 24 different categories shown, like artist(s)_name, bpm, streams, etc.... While there are only two types of data which is an object and an integer. The integer serves as the number values while the object serves as the alphabet characters.
 
+Using the code below will determine if there are any missing values inside the dataset.
 
+```ruby
+missing_data = spot_df.isnull().sum()
+missing_data
+```
 
+According to the output:
 
+![image](https://github.com/user-attachments/assets/8632046a-310b-4863-9c9c-0f2a2b7cdccc)
 
-
-
-
-
-
-
+There are two categories with missing values.50 outputs are missing in the category **in_shazam_charts** and 95 in the category **key**.
 
 
 ### Updates:
+
+  v1.4 - Answered the Overview of the Dataset
 
   v1.0 - Added the Application Definition,Project Description, General Guidelines, and Guide Questions for the Project
       
