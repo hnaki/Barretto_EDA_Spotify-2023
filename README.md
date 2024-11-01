@@ -71,7 +71,7 @@ This will load the dataset into the notebook:
 ![image](https://github.com/user-attachments/assets/427cf3ef-8fb6-45e1-aa0d-4eaaff266126)
 
 
-Using the code **encoding='ISO-8859-1** will prevent loading errors due to special characters like **#**. There are 953 rows and 24 columns inside the dataset. The columns serves as the categories while the rows serves as the entries, or the songs that were listed in the dataset.
+Using the code **encoding='ISO-8859-1'** will prevent loading errors due to special characters like **#**. There are 953 rows and 24 columns inside the dataset. The columns serves as the categories while the rows serves as the entries, or the songs that were listed in the dataset.
 
 In order to determine the types of categories of the dataset, the code was written below:
 
@@ -183,7 +183,49 @@ There are many single artists who have the famous tracks of 2023 and as the arti
 
 
 
+
+**Top Performers**
+
+To determine the top 5 most streamed tracks and their artist(s) name, the code below was used:
+
+```ruby
+top_tracks = spot_df.nlargest(5, 'streams')[['artist(s)_name','track_name', 'streams',]]
+top_tracks
+```
+
+Which will display the output:
+
+![image](https://github.com/user-attachments/assets/4fcde69a-1db1-4a94-a898-a01670c2957f)
+
+The Weekend with the track **Blinding Lights** has the most streams with 3.703895 x 10^9 streams last 2023, followed by Shape of You by Ed Sheeran, Someone you Loved by Lewis Capaldi, Dance Monkey by Tones and I, and Sunflower - Spider-Man: Into the Spider-Verse by Post Malone and Swae Lee.
+
+
+To determine the top 5 most frequent artists based on the number of tracks in the dataset, the code below was used:
+
+```ruby
+top_artists = spot_df['artist(s)_name'].value_counts().head(5)
+top_artists
+```
+
+Which will display the output:
+
+![image](https://github.com/user-attachments/assets/cb93fc7d-f456-4151-bf4b-ab1496211400)
+
+Taylor Swift has the most number of tracks in the dataset with 34 tracks, followed by the Weekend, Bad Bunny, SZA, and Harry Styles.
+
+
+
+
+
+
+
+
+
+
+
 ### Updates:
+
+  v1.8 - Answered the Top Performers
 
   v1.7 - Answered the Basic Descriptive Statistics
 
