@@ -214,6 +214,105 @@ Which will display the output:
 Taylor Swift has the most number of tracks in the dataset with 34 tracks, followed by the Weekend, Bad Bunny, SZA, and Harry Styles.
 
 
+**Temporal Trends**
+
+To check the number of tracks released every year, the code below was used:
+
+```ruby
+tracks_per_year = spot_df['released_year'].value_counts().sort_index()
+plt.figure(figsize=(12, 5))
+sns.lineplot(x=tracks_per_year.index, y=tracks_per_year.values)
+plt.title('Number of Tracks Released per Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Tracks')
+plt.show()
+```
+
+Showing a line graph as an output:
+
+![image](https://github.com/user-attachments/assets/dfb19d36-bd16-49ad-83cb-88bd83e25c3b)
+
+
+The graph shows the number of tracks that were released during the years. There was small increases of the number of tracks during the 1960's to 2000's that were famous for 2023. Then it increased and in the 2020's there was a huge number of tracks that were released that were famous in 2023.
+
+Now to check if the number of tracks released per month have any patterns, the code below was used:
+
+```ruby
+monthly_releases = spot_df['released_month'].value_counts().sort_index()
+plt.figure(figsize=(10, 6))
+sns.barplot(x=monthly_releases.index, y=monthly_releases.values, hue=monthly_releases.index, dodge=False, legend=False)
+plt.title('Number of Tracks Released Per Month')
+plt.xlabel('Month')
+plt.ylabel('Count')
+plt.xticks(rotation=45)
+plt.show()
+```
+
+This will show a bar graph with the number of tracks released per month, with the month numbers starting from 1 to 12 (January-December):
+
+![image](https://github.com/user-attachments/assets/2db9c5ed-b963-491c-b85e-702aa909697a)
+
+January has the most released tracks, second is May, and August has the least number of track releases. Every start of the year, artists tend to release their new song tracks as a fresh start.
+
+
+**Genre and Music Characteristics**
+
+To determine the correlation between streams and musical attributes like bpm, danceability_%, and energy_%, the code below was used:
+
+```ruby
+correlation_matrix = spot_df[['streams', 'bpm', 'danceability_%', 'energy_%']].corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='viridis')
+plt.title('Correlation Between Streams and Musical Attributes')
+plt.show()
+```
+
+This will show a heat map that with the correlation below:
+
+![image](https://github.com/user-attachments/assets/00fdcecd-223b-46fc-9c6e-01b0f8c40446)
+
+
+The correlation between the streams and bpm has a negative correlation with -0.0024. This suggests that there is no relationship on the number of streams and the bpm of the track. 
+
+The correlation between the streams and danceability_% has a weak negative correlation with -0.11. This suggests that it is a weak negative correlation, implying a light tendency for more danceable tracks to have fewer streams, but the effect is minimal and likely not significant.
+
+The correlation between the streams and the energy_% has a a negative correlation with -0.026. This suggests that there is no relationship between the number of streams and how it gives energy to the listeners.
+
+
+We can also determine the correlation between danceability_% and energy_% from the given heat map. There is a positive weak relationship between the two with 0.2. This implies that the more the track is danceable, the more energy levels are produced, however, based on the code below:
+
+```ruby
+plt.figure(figsize=(10, 6))
+sns.regplot(x='danceability_%', y='energy_%', data=spot_df, scatter_kws={'alpha':0.5}, line_kws={'color': 'red'})
+plt.title('Correlation Between Danceability and Energy')
+plt.xlabel('Danceability (%)')
+plt.ylabel('Energy (%)')
+plt.show()
+```
+
+This will show why the correlation has a low value:
+
+![image](https://github.com/user-attachments/assets/00ebd050-dfc5-4446-8666-db9dae3d2557)
+
+The blue dots represent the tracks that are scattered around the graph, the more dispersed the dots are, the lesser the correlation between the two are. 
+
+To determine the correlation with valence_& and acousticness_%, another scatter plot was used:
+
+```ruby
+plt.figure(figsize=(10, 6))
+sns.regplot(x='valence_%', y='acousticness_%', data=spot_df, scatter_kws={'alpha':0.5}, line_kws={'color': 'red'})
+plt.title('Correlation Between Valence and Acousticness')
+plt.xlabel('Valence (%)')
+plt.ylabel('Acousticness (%)')
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/53b2108f-1746-45a3-a4e7-77e105330c67)
+
+
+The graph implies that the more valence_% of the songs are, the less acousticness_% is. This weak inverse relationship might indicate that tracks with high positivity or valence are less likely to be acoustic, potentially because more upbeat or happy tracks are produced with electronic or synthesized elements.
+
+
+
 
 
 
@@ -224,6 +323,8 @@ Taylor Swift has the most number of tracks in the dataset with 34 tracks, follow
 
 
 ### Updates:
+
+  v.1.85 - Answered Temporal Trends and Genre and Music Characteristics
 
   v1.8 - Answered the Top Performers
 
