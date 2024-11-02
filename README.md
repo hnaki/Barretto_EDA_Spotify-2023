@@ -319,19 +319,20 @@ The graph implies that the more valence_% of the songs are, the less acousticnes
 
  **Platform Popularity**
 
- In order to compare the values of spotify playlists, spotify charts, and apple playlists, the code below was used:
+ In order to compare the values of spotify playlists, deezer playlists, and apple playlists, the code below was used:
  
 ```ruby
-platforms = ['in_spotify_playlists', 'in_spotify_charts', 'in_apple_playlists']
+spot_df['in_deezer_playlists'] = pd.to_numeric(spot_df['in_deezer_playlists'], errors='coerce').fillna(0).astype(int)
+platforms = ['in_spotify_playlists', 'in_deezer_playlists', 'in_apple_playlists']
 platform_counts = spot_df[platforms].sum()
 platform_counts.plot(kind='bar', title='Track Counts Across Platforms', color='black')
 plt.ylabel('Count')
 plt.show()
 ```
 
-This show a graph with the count of 1 million and noticing the graph, the spotify charts has no visible bar due to how little the combined values of all the tracks. Spotify playlists have the most value of most famous tracks nearly 5 million tracks were saved by users.
+I converted the 'in_deezer_playlists' due to having a different data type than the rest. A graph with the count of 1 million and noticing the graph, the spotify charts has no visible bar due to how little the combined values of all the tracks. Spotify playlists have the most value of most famous tracks nearly 5 million tracks were saved by users.
 
-![image](https://github.com/user-attachments/assets/9b998e05-fa3f-4396-819a-586b9b7dd163)
+![image](https://github.com/user-attachments/assets/fb00dbe8-1550-47ac-ac70-f958aec45818)
 
 
  **Advanced Analysis**
@@ -355,8 +356,6 @@ Looking at the graph, with the count of 100 million streams; the key of E and wi
 Now to determine the most frequently appearing artists appearing in playlists and in charts, I separated the graph to check the difference by using the codes below:
 
 ```ruby
-spot_df['in_deezer_playlists'] = pd.to_numeric(spot_df['in_deezer_playlists'], errors='coerce').astype(int)
-
 playlist_columns = ['in_spotify_playlists', 'in_apple_playlists', 'in_deezer_playlists']
 
 artist_playlist_counts = spot_df.groupby('artist(s)_name')[playlist_columns].sum()
@@ -373,7 +372,7 @@ plt.ylabel('Artist')
 plt.show()
 ```
 
-For playlists, I converted the 'in_deezer_playlists' due to having a different data type than the rest. Then I grouped the data inside the platforms. After that, I grouped the artists and the sum playlist appearances of each artist across the platforms. Then I calculate the total sum playlists appearances and sorted it from greatest to least. I only picked the top 10 artists for better visualization purposes.
+For playlists, I grouped the data inside the platforms. After that, I grouped the artists and the sum playlist appearances of each artist across the platforms. Then I calculate the total sum playlists appearances and sorted it from greatest to least. I only picked the top 10 artists for better visualization purposes.
 
 Plotting it in the graph would look like this:
 
@@ -427,6 +426,8 @@ This project was the biggest thing I have done in my coding experience. If data 
 
 
 ### Updates:
+
+  v.2.5 - Changed coding and comments in Platform Popularity and Advanced Analysis
 
   v2.0 - Answered Platform Popularity, Advanced Analysis, and Concluded this Project
 
