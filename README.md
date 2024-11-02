@@ -1,5 +1,10 @@
 # Barretto_EDA_Spotify-2023
 
+Name: Barretto, Aron Caleb R.
+
+Section: 2ECE-D
+
+Date: 11/02/2024
 
 ### Introduction to the Application
 
@@ -252,7 +257,7 @@ This will show a bar graph with the number of tracks released per month, with th
 
 ![image](https://github.com/user-attachments/assets/2db9c5ed-b963-491c-b85e-702aa909697a)
 
-January has the most released tracks, second is May, and August has the least number of track releases. Every start of the year, artists tend to release their new song tracks as a fresh start.
+January has the most released tracks that were streamed the most in 2023, second is May, and August has the least number of track releases. Every start of the year, artists tend to release their new song tracks as a fresh batch of tracks for the people to listen to.
 
 
 **Genre and Music Characteristics**
@@ -312,17 +317,118 @@ plt.show()
 The graph implies that the more valence_% of the songs are, the less acousticness_% is. This weak inverse relationship might indicate that tracks with high positivity or valence are less likely to be acoustic, potentially because more upbeat or happy tracks are produced with electronic or synthesized elements.
 
 
+ **Platform Popularity**
+
+ In order to compare the values of spotify playlists, spotify charts, and apple playlists, the code below was used:
+ 
+```ruby
+platforms = ['in_spotify_playlists', 'in_spotify_charts', 'in_apple_playlists']
+platform_counts = spot_df[platforms].sum()
+platform_counts.plot(kind='bar', title='Track Counts Across Platforms', color='black')
+plt.ylabel('Count')
+plt.show()
+```
+
+This show a graph with the count of 1 million and noticing the graph, the spotify charts has no visible bar due to how little the combined values of all the tracks. Spotify playlists have the most value of most famous tracks nearly 5 million tracks were saved by users.
+
+![image](https://github.com/user-attachments/assets/9b998e05-fa3f-4396-819a-586b9b7dd163)
 
 
+ **Advanced Analysis**
+
+ To check what key and mode patterns have in the streams column, the code below was used:
+
+```ruby
+key_mode_analysis = spot_df.groupby(['key', 'mode'])['streams'].mean().unstack()
+key_mode_analysis.plot(kind='bar', title='Average Streams by Key and Mode')
+plt.ylabel('Average Streams')
+plt.xticks(rotation=45)
+plt.show()
+```
+This will show the different values of streams with the key or mode used for the track:
+
+![image](https://github.com/user-attachments/assets/3a69396a-242b-4277-883b-c4a46d5ce047)
+
+Looking at the graph, with the count of 100 million streams; the key of E and with a mode of a major has the most number of average streams that are in the most streamed songs of 2023. On the other hand, the key of F# and a mode of a minor has the most number of average streams. Only 3 keys (A, B, and F#) with the mode of a minor has more streams than the major mode. This means that a major mode would make a track more streamed.
 
 
+Now to determine the most frequently appearing artists appearing in playlists and in charts, I separated the graph to check the difference by using the codes below:
+
+```ruby
+spot_df['in_deezer_playlists'] = pd.to_numeric(spot_df['in_deezer_playlists'], errors='coerce').astype(int)
+
+playlist_columns = ['in_spotify_playlists', 'in_apple_playlists', 'in_deezer_playlists']
+
+artist_playlist_counts = spot_df.groupby('artist(s)_name')[playlist_columns].sum()
+
+artist_playlist_counts['total_playlist_appearances'] = artist_playlist_counts.sum(axis=1)
+
+top_playlist_artists = artist_playlist_counts.sort_values(by='total_playlist_appearances', ascending=False).head(10)
+
+plt.figure(figsize=(12, 8))
+sns.barplot(y=top_playlist_artists.index, x=top_playlist_artists['total_playlist_appearances'], hue=top_playlist_artists.index, dodge=False, legend=False)
+plt.title('Top 10 Artists by Playlist Appearances')
+plt.xlabel('Total Appearances in Playlists')
+plt.ylabel('Artist')
+plt.show()
+```
+
+For playlists, I converted the 'in_deezer_playlists' due to having a different data type than the rest. Then I grouped the data inside the platforms. After that, I grouped the artists and the sum playlist appearances of each artist across the platforms. Then I calculate the total sum playlists appearances and sorted it from greatest to least. I only picked the top 10 artists for better visualization purposes.
+
+Plotting it in the graph would look like this:
+
+![image](https://github.com/user-attachments/assets/3900ed4c-918d-4be4-8a29-c20c274260e9)
 
 
+Similar to the charts, an addition of 'in_shazam_charts' was introduced, and was converted. However there are no values in some tracks, so I decided to disregard those without values with just 0. Then using the same code above but instead changing the playlists to the charts:
+
+```ruby
+spot_df['in_shazam_charts'] = pd.to_numeric(spot_df['in_shazam_charts'], errors='coerce').fillna(0).astype(int)
+
+chart_columns = ['in_deezer_charts', 'in_shazam_charts', 'in_spotify_charts', 'in_apple_charts']
+
+artist_chart_counts = spot_df.groupby('artist(s)_name')[chart_columns].sum()
+
+artist_chart_counts['total_chart_appearances'] = artist_chart_counts.sum(axis=1)
+
+top_chart_artists = artist_chart_counts.sort_values(by='total_chart_appearances', ascending=False).head(10)
+
+plt.figure(figsize=(12, 8))
+sns.barplot(y=top_chart_artists.index, x=top_chart_artists['total_chart_appearances'], hue=top_chart_artists.index, dodge=False, legend=False)
+plt.title('Top 10 Artists by Chart Appearances')
+plt.xlabel('Total Appearances in Charts')
+plt.ylabel('Artist(s)')
+plt.show()
+```
+
+Which will display the output below:
+
+![image](https://github.com/user-attachments/assets/9a75cd03-8ffd-4c12-8ca3-24cd011bc17b)
 
 
+Looking at the most frequent artists, I only noticed 3 artists who are in both graphs, which is Taylor Swift, The Weekend, and Ed Sheeran. However, there are more streams in playlists rather in charts. This means that users tend to listen more streams in the playlists rather than using charts.
+
+
+### CONCLUSION
+
+In order for a track to be popular, it must have the following according to the results:
+
+1. The track must be released every start of the year.
+2. The track depends on how you want to be more upbeat to be danceable, or less valence to be more acoustic for the listeners.
+3. Upload the tracks in playlists rather than in charts.
+4. Recent tracks makes it more popular. Forgotten tracks are tend to be less popular.
+5. Single artists tend to get more famous tracks.
+6. Using major mode of tracks gets more famous tracks.
+
+
+### Final Comments
+
+This project was the biggest thing I have done in my coding experience. If data analysts do this every time, I salute to their hardwork, diligence, and all the efforts they do to create an analysis to help applications to improve for further advancements. It wasn't really easy as expected due to how much coding and comments, but I felt relieved after finishing it all.
 
 
 ### Updates:
+
+  v2.0 - Answered Platform Popularity, Advanced Analysis, and Concluded this Project
 
   v.1.85 - Answered Temporal Trends and Genre and Music Characteristics
 
